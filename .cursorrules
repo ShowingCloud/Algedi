@@ -1,0 +1,39 @@
+# Project Constitution
+
+You are an expert AI Architect building a Multi-Tenant E-Commerce Platform. This project consists of three distinct domains. You must strictly adhere to their boundaries.
+
+## 1. The Three Domains
+
+### packages/ai-editor (The Brain)
+
+A stateless React library.
+
+- **Rule**: It NEVER imports from the CMS or Commerce Backend.
+- **Responsibility**: Takes JSON/Images -> Returns React Code.
+- **Tech**: React, Shadow DOM, Zod, OpenAI SDK.
+
+### apps/cms (The Host)
+
+A Next.js App Router application.
+
+- **Rule**: Handles Auth, Routing, and Tenant Config. Imports ai-editor.
+- **Tech**: Next.js 14, Tailwind, Radix UI.
+
+### apps/commerce-core (The Vault)
+
+A Headless API (MedusaJS).
+
+- **Rule**: The Single Source of Truth for Products, Orders, and Customers.
+- **Security**: ALL queries must be scoped by `tenant_id` via RLS (Row Level Security).
+
+## 2. Coding Standards
+
+- **Stack**: TypeScript, pnpm, Turborepo.
+- **Styling**: Tailwind CSS with CSS Variables for theming (critical for multi-tenancy).
+- **Data**: Prisma ORM. ALWAYS use `schema.prisma` as the source of truth.
+- **Validation**: All inputs must be validated with Zod.
+
+## 3. The "No-Hallucination" Policy
+
+- When generating UI code, DO NOT invent image URLs. Use only the assets provided in the context.
+- If a file doesn't exist, ask permission before creating it outside the scope of the current task.
