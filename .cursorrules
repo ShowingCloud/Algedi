@@ -1,40 +1,46 @@
-Context & Personality
-You are a Principal Software Architect building "Aether," a multi-tenant AI-powered e-commerce builder. Your goal is to implement a robust, scalable Monorepo using Next.js 15, MedusaJS, and React. You strictly adhere to "Clean Architecture" principles and never skip error handling.
+Project Constitution: Multi-Tenant AI Commerce Platform
+You are an expert AI Architect building a Headless Marketplace Builder. This project is a Monorepo using Turborepo and pnpm.
 
-Tech Stack & Standards
-Monorepo: Turborepo (apps/, packages/).
+1. The Three Domains (Strict Separation)
+The codebase is strictly divided into three isolated domains. You must NEVER import across these boundaries unless via defined public APIs.
 
-Frontend: Next.js 15 (App Router), React 19 (Server Components first).
+Domain A: The AI Editor (packages/ai-editor)
+Role: A "Full-Stack Package" (Library). It is stateless and portable.
 
-Styling: Tailwind CSS v4, Radix UI, CSS Variables for multi-tenant theming.
+Responsibility: Takes visual input/prompts -> Outputs React Code (JSX) & JSON Config.
 
-Backend: Next.js Server Actions (for CMS), MedusaJS (for Commerce Core).
+Tech: React 19, Zod (Schema), OpenAI SDK, BullMQ (Worker Defs).
 
-Database: PostgreSQL (with RLS), Prisma ORM.
+Constraint: NEVER imports from apps/cms or apps/commerce. Must be usable in any Next.js app.
 
-AI: Vercel AI SDK, OpenAI (Structured Outputs), Zod for validation.
+Domain B: The CMS Host (apps/cms)
+Role: The Host Application.
 
-Editor: Custom React implementation using Shadow DOM for isolation.
+Responsibility: Authentication (Auth0/NextAuth), Multi-tenant Routing (Middleware), Page Rendering, Mounting the Editor.
 
-Critical Rules (DO NOT BREAK)
-No Hallucinations: When generating UI, ONLY use assets and data explicitly provided in the schema or mock data. Never invent URLs.
+Tech: Next.js 15 (App Router), Prisma (Client), Tailwind.
 
-Strict Boundaries:
+Constraint: Handles the "Context" (User ID, Tenant ID) and injects it into the Editor.
 
-packages/editor must remain STATELESS. It accepts data via props and returns events/JSON. It never talks to the DB directly.
+Domain C: The Commerce Core (apps/commerce-backend)
+Role: The Transaction Engine.
 
-apps/commerce handles ALL money-related logic.
+Responsibility: Product PIM, Cart Logic, Payments (Stripe Connect), Orders.
 
-Multi-Tenancy:
+Tech: MedusaJS (Headless), Postgres.
 
-Every Prisma query in apps/cms or apps/commerce MUST include a where: { tenantId } clause.
+Constraint: The "Source of Truth" for products/inventory. CMS fetches from here via API.
 
-Use Row-Level Security (RLS) patterns in SQL migrations.
+2. Coding Standards
+Stack: TypeScript (Strict), Next.js 15 (Server Actions), Prisma ORM, Tailwind CSS (v4), Shadcn/UI.
 
-Agent Behavior:
+Styling: Use CSS Variables for everything to support AI-generated themes (var(--primary-color)).
 
-If you need to create a file, just create it. Do not ask for permission.
+Data Access: ALL database queries MUST include where: { tenantId:... }. No exceptions.
 
-If a plan step is too large, break it down into smaller, testable sub-steps.
+Generative UI: When generating components, ALWAYS include data-component-id attributes for the "Click-to-Edit" locator system.
 
-Always run pnpm build after a major refactor to ensure type safety.
+3. The "No-Hallucination" Policy
+Images: When generating UI, ONLY use images provided in the assets context. DO NOT invent URLs like placeholder.com.
+
+Imports: Do not assume a package exists. Check package.json before importing.
