@@ -4,6 +4,6 @@
 [submodule "apps/cms"]
 	path = apps/cms
 	url = https://github.com/ShowingCloud/Yan.git
-[submodule "apps/ai-service"]
-	path = apps/ai-service
+[submodule "packages/ai"]
+	path = packages/ai
 	url = https://github.com/ShowingCloud/Marakk.git
