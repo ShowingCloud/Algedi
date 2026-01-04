@@ -7,3 +7,12 @@
 [submodule "packages/ai"]
 	path = packages/ai
 	url = https://github.com/ShowingCloud/Marakk.git
+[submodule "packages/ai-editor"]
+	path = packages/ai-editor
+	url = https://github.com/ShowingCloud/Marakk.git
+[submodule "packages/cms"]
+	path = packages/cms
+	url = https://github.com/ShowingCloud/Yan.git
+[submodule "packages/commerce"]
+	path = packages/commerce
+	url = https://github.com/ShowingCloud/Yen.git

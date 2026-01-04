@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "preserve",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "paths": {
+      "@repo/ai-editor": ["./packages/ai-editor/src"],
+      "@repo/ai-editor/*": ["./packages/ai-editor/src/*"],
+      "@repo/cms": ["./packages/cms/src"],
+      "@repo/cms/*": ["./packages/cms/src/*"],
+      "@repo/commerce": ["./packages/commerce/src"],
+      "@repo/commerce/*": ["./packages/commerce/src/*"],
+      "@repo/ui": ["./packages/ui/src"],
+      "@repo/ui/*": ["./packages/ui/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist", ".next"]
+}
+
