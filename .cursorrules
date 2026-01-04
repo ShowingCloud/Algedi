@@ -1,46 +1,64 @@
-Project Constitution: Multi-Tenant AI Commerce Platform
-You are an expert AI Architect building a Headless Marketplace Builder. This project is a Monorepo using Turborepo and pnpm.
+Cursor Rules: Modular Monolith Architecture
+You are an expert Systems Architect building a Modular Monolith in a Turborepo. The goal is to build three standalone products that happen to be hosted together.
 
-1. The Three Domains (Strict Separation)
-The codebase is strictly divided into three isolated domains. You must NEVER import across these boundaries unless via defined public APIs.
+1. The "Three-Product" Structure
+We do not build a "backend" and "frontend". We build Vertical Feature Modules in packages/. The apps/platform is strictly a Shell (integration layer).
 
-Domain A: The AI Editor (packages/ai-editor)
-Role: A "Full-Stack Package" (Library). It is stateless and portable.
+Product A: The Editor (packages/ai-editor)
+Responsibility: Generative UI, Asset Management, Prompt Engineering.
 
-Responsibility: Takes visual input/prompts -> Outputs React Code (JSX) & JSON Config.
+Independence: Must run even if Commerce or CMS are missing.
 
-Tech: React 19, Zod (Schema), OpenAI SDK, BullMQ (Worker Defs).
+Data: Owns EditorSchema.
 
-Constraint: NEVER imports from apps/cms or apps/commerce. Must be usable in any Next.js app.
+Product B: The CMS (packages/cms)
+Responsibility: Page Hierarchy, Routing Logic, Theme Management.
 
-Domain B: The CMS Host (apps/cms)
-Role: The Host Application.
+Independence: Consumes Editor as a dependency.
 
-Responsibility: Authentication (Auth0/NextAuth), Multi-tenant Routing (Middleware), Page Rendering, Mounting the Editor.
+Data: Owns ContentSchema.
 
-Tech: Next.js 15 (App Router), Prisma (Client), Tailwind.
+Product C: The Commerce Engine (packages/commerce)
+Responsibility: Products, Orders, Customers, Cart.
 
-Constraint: Handles the "Context" (User ID, Tenant ID) and injects it into the Editor.
+Independence: Strictly headless. Pure logic & data.
 
-Domain C: The Commerce Core (apps/commerce-backend)
-Role: The Transaction Engine.
+Data: Owns ShopSchema.
 
-Responsibility: Product PIM, Cart Logic, Payments (Stripe Connect), Orders.
+2. The "Single Server" Constraint
+Runtime: All code runs in one Next.js server instance (apps/platform).
 
-Tech: MedusaJS (Headless), Postgres.
+Communication:
 
-Constraint: The "Source of Truth" for products/inventory. CMS fetches from here via API.
+❌ NO HTTP/REST calls between modules (e.g., fetch('localhost:3000/api/product')).
 
-2. Coding Standards
-Stack: TypeScript (Strict), Next.js 15 (Server Actions), Prisma ORM, Tailwind CSS (v4), Shadcn/UI.
+✅ DIRECT function calls (e.g., await commerce.getProduct(id)).
 
-Styling: Use CSS Variables for everything to support AI-generated themes (var(--primary-color)).
+State: No shared global state. Pass context (like tenantId) as function arguments.
 
-Data Access: ALL database queries MUST include where: { tenantId:... }. No exceptions.
+3. Data isolation Rule (Crucial)
+Each package MUST have its own prisma.schema.
 
-Generative UI: When generating components, ALWAYS include data-component-id attributes for the "Click-to-Edit" locator system.
+Each package MUST generate its own Prisma Client.
 
-3. The "No-Hallucination" Policy
-Images: When generating UI, ONLY use images provided in the assets context. DO NOT invent URLs like placeholder.com.
+NEVER create foreign keys between tables of different packages. Use Logical Linking (store UUIDs as Strings).
 
-Imports: Do not assume a package exists. Check package.json before importing.
+4. Coding Standards
+Stack: Next.js 15 (App Router), Prisma, Tailwind, TypeScript.
+
+Exports: Each package must export:
+
+components/*: UI parts.
+
+actions/*: Server Actions.
+
+api/*: Route Handlers (to be mounted by the host).
+
+Styling: Use packages/ui for shared primitives (buttons, inputs), but allow modules to define their own layout.
+
+5. Billing Hooks
+Since modules are standalone, they cannot know about Stripe.
+
+Modules must emit Usage Events (e.g., onAiGeneration, onOrderCompleted).
+
+The Host (apps/platform) listens to these events to handle billing.
