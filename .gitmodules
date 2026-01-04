@@ -1,0 +1,9 @@
+[submodule "apps/commerce-core"]
+	path = apps/commerce-core
+	url = https://github.com/ShowingCloud/Yen.git
+[submodule "apps/cms"]
+	path = apps/cms
+	url = https://github.com/ShowingCloud/Yan.git
+[submodule "apps/ai-service"]
+	path = apps/ai-service
+	url = https://github.com/ShowingCloud/Marakk.git
