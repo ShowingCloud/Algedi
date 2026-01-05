@@ -38,6 +38,7 @@ pnpm-debug.log*
 # Prisma
 **/prisma/migrations
 **/generated
+**/src/generated
 
 # IDE
 .vscode
