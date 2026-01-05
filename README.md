@@ -221,8 +221,11 @@ MIT License - see [LICENSE](./LICENSE) file for details.
 
 ## 🔗 Related Packages
 
-Each package has its own README:
-- [`packages/ai-editor/README.md`](./packages/ai-editor/README.md)
-- [`packages/cms/README.md`](./packages/cms/README.md)
-- [`packages/commerce/README.md`](./packages/commerce/README.md)
+Each package is a standalone open source project with its own repository:
+
+- **[AI Editor (Marakk)](https://github.com/ShowingCloud/Marakk/blob/main/README.md)** - Generative UI, Asset Management, and Prompt Engineering
+- **[CMS (Yan)](https://github.com/ShowingCloud/Yan/blob/main/README.md)** - Page Hierarchy, Routing Logic, and Theme Management
+- **[Commerce (Yen)](https://github.com/ShowingCloud/Yen/blob/main/README.md)** - Products, Orders, Customers, and Cart
+
+For package-specific documentation, refer to each package's repository README.
 
