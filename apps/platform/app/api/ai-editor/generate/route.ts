@@ -1,5 +1,15 @@
-import { generate } from '@repo/ai-editor/api';
+import { createAIEditorRoutes } from '@repo/ai-editor/api';
 
-// Mount the AI Editor's generate route handler
-export const POST = generate;
+// Create routes with platform-specific configuration
+// The host can inject API keys, Redis connection, etc.
+const routes = createAIEditorRoutes({
+  // Configuration is injected from environment variables by default
+  // Host can override here if needed:
+  // openaiApiKey: process.env.OPENAI_API_KEY,
+  // redisUrl: process.env.REDIS_URL,
+  enableBilling: true, // Enable billing checks
+});
+
+// Export the generate handler
+export const POST = routes.generate;
 

@@ -1,11 +1,16 @@
-import { jobStatus } from '@repo/ai-editor/api';
+import { createAIEditorRoutes } from '@repo/ai-editor/api';
 
-// Mount the AI Editor's job status route handler
-// Note: We need to wrap it to handle Next.js 15 async params
+// Create routes with platform-specific configuration
+const routes = createAIEditorRoutes({
+  // Configuration injected from environment variables
+  enableBilling: true,
+});
+
+// Export the job status handler
 export async function GET(
   request: Request,
   context: { params: Promise<{ jobId: string }> }
 ) {
-  return jobStatus(request as any, context);
+  return routes.jobStatus(request as any, context);
 }
 
