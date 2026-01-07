@@ -21,96 +21,123 @@ This document identifies features from the design documents (v1-v4) that are mis
 - ✅ Platform integration with tenant routing
 - ✅ Credits-based billing system
 
+### Phase 7-11 (Additional Features Completed)
+- ✅ Async Processing Infrastructure (BullMQ workers, processors, job tracking)
+- ✅ Async Image Description (upload, vision model, job status polling)
+- ✅ Prompt Augmentation Builder (tone, format, context injection, synthesis)
+- ✅ Semantic Search with pgvector (embeddings, cosine similarity, related prompts)
+- ✅ Stripe Connect Integration (accounts, subscriptions, metered billing, shadow ledger)
+- ✅ Route Factory Pattern (configuration injection, factory functions)
+
 ---
 
 ## 🔴 Critical Missing Features (High Priority)
 
-### 1. Async Processing Infrastructure (v3, v4)
-**Status:** Structure exists but not fully implemented
+### 1. Async Processing Infrastructure (v3, v4) ✅ COMPLETED
+**Status:** ✅ Fully implemented
 
-**Missing:**
-- [ ] BullMQ worker execution (dedicated script or instrumentation)
-- [ ] Queue processors for long-running AI tasks
-- [ ] Job status tracking and polling
-- [ ] Worker factory pattern implementation
+**Completed:**
+- ✅ BullMQ worker execution (dedicated script)
+- ✅ Queue processors for long-running AI tasks (image-description, prompt-embedding, text-generation)
+- ✅ Job status tracking and polling (JobStatusPolling component)
+- ✅ Worker factory pattern implementation
 
-**Files to Create/Update:**
-- `packages/ai-editor/src/workers/worker.ts` - Worker factory
-- `packages/ai-editor/src/workers/processors/` - Job processors
-- `apps/platform/scripts/start-worker.ts` - Worker execution script
-- `apps/platform/instrumentation.ts` - Optional dev worker startup
+**Files Created:**
+- ✅ `packages/ai-editor/src/workers/worker.ts` - Worker factory
+- ✅ `packages/ai-editor/src/workers/processors/` - Job processors (image-description, prompt-embedding, text-generation)
+- ✅ `apps/platform/scripts/start-worker.ts` - Worker execution script
+- ✅ `packages/ai-editor/src/components/JobStatusPolling.tsx` - Job status polling component
 
 **Reference:** v4 Section 6, v3 Chapter 3
 
 ---
 
-### 2. Async Image Description (v1, v3)
-**Status:** Asset model exists, but async processing not implemented
+### 2. Async Image Description (v1, v3) ✅ COMPLETED (Partial)
+**Status:** ✅ Core functionality implemented
 
-**Missing:**
-- [ ] Image upload with presigned URLs (S3/R2)
-- [ ] Async job for vision model analysis
-- [ ] Skeleton loader/BlurHash placeholders
-- [ ] Real-time job status updates (polling or SSE)
+**Completed:**
+- ✅ Async job for vision model analysis (GPT-4 Vision)
+- ✅ Real-time job status updates (polling component)
+- ✅ Image upload action and component
 
-**Files to Create:**
-- `packages/ai-editor/src/workers/processors/image-description.ts`
-- `packages/ai-editor/src/server/actions/upload-asset.ts`
-- `packages/ai-editor/src/components/ImageUploader.tsx`
+**Files Created:**
+- ✅ `packages/ai-editor/src/workers/processors/image-description.ts`
+- ✅ `packages/ai-editor/src/server/actions/upload-asset.ts`
+- ✅ `packages/ai-editor/src/components/ImageUploader.tsx`
+- ✅ `apps/platform/app/api/ai-editor/upload/route.ts`
+
+**Remaining (Nice-to-Have):**
+- [ ] Image upload with presigned URLs (S3/R2) - structure exists, needs S3/R2 integration
+- [ ] Skeleton loader/BlurHash placeholders - UI enhancement
 
 **Reference:** v3 Section 3.2, v1 Section 4.2
 
 ---
 
-### 3. Prompt Augmentation Builder (v1, v3)
-**Status:** Basic prompt input exists, but structured builder missing
+### 3. Prompt Augmentation Builder (v1, v3) ✅ COMPLETED
+**Status:** ✅ Fully implemented
 
-**Missing:**
-- [ ] Tone selector (Professional, Witty, Academic)
-- [ ] Format selector (Bullet Points, Table, Paragraph)
-- [ ] Context injection (previous documents, assets)
-- [ ] System prompt synthesis from structured inputs
+**Completed:**
+- ✅ Tone selector (8 options: Professional, Casual, Witty, Academic, Friendly, Formal, Creative, Technical)
+- ✅ Format selector (7 options: Paragraph, Bullet Points, Table, List, Code, JSON, Markdown)
+- ✅ Context injection (previous documents, assets, related prompts)
+- ✅ System prompt synthesis from structured inputs
+- ✅ Prompt templates (4 pre-built templates)
 
-**Files to Create:**
-- `packages/ai-editor/src/components/PromptBuilder.tsx`
-- `packages/ai-editor/src/lib/prompt-synthesis.ts`
+**Files Created:**
+- ✅ `packages/ai-editor/src/components/PromptBuilder.tsx`
+- ✅ `packages/ai-editor/src/lib/prompt-synthesis.ts`
+- ✅ `packages/ai-editor/src/lib/prompt-types.ts`
+- ✅ Integration with FloatingToolbar and generate-stream action
 
 **Reference:** v3 Section 1.3.3, v1 Section 4.3
 
 ---
 
-### 4. Semantic Search with pgvector (v3)
-**Status:** PromptHistory model exists, but vector search not implemented
+### 4. Semantic Search with pgvector (v3) ✅ COMPLETED
+**Status:** ✅ Fully implemented
 
-**Missing:**
-- [ ] pgvector extension setup
-- [ ] Embedding generation for prompts
-- [ ] Cosine similarity search queries
-- [ ] "Related Prompts" feature in editor
+**Completed:**
+- ✅ pgvector extension setup (SQL script provided)
+- ✅ Embedding generation for prompts (OpenAI text-embedding-3-small)
+- ✅ Cosine similarity search queries (raw SQL with pgvector)
+- ✅ "Related Prompts" feature in editor (PromptSuggestions component)
+- ✅ Async embedding generation (worker processor)
 
-**Files to Create/Update:**
-- `packages/ai-editor/prisma/schema.prisma` - Add vector type
-- `packages/ai-editor/src/lib/embeddings.ts`
-- `packages/ai-editor/src/server/actions/search-prompts.ts`
+**Files Created/Updated:**
+- ✅ `packages/ai-editor/prisma/schema.prisma` - Added embeddingGenerated flag
+- ✅ `packages/ai-editor/src/lib/embeddings.ts`
+- ✅ `packages/ai-editor/src/server/actions/search-prompts.ts`
+- ✅ `packages/ai-editor/src/server/services/prompt-service.ts`
+- ✅ `packages/ai-editor/src/workers/processors/prompt-embedding.ts`
+- ✅ `packages/ai-editor/src/components/PromptSuggestions.tsx`
+- ✅ `packages/ai-editor/scripts/setup-pgvector.sql`
+- ✅ `apps/platform/app/api/ai-editor/prompts/search/route.ts`
 
 **Reference:** v3 Section 2.2
 
 ---
 
-### 5. Stripe Connect Integration (v3)
-**Status:** Credits system exists, but Stripe integration missing
+### 5. Stripe Connect Integration (v3) ✅ COMPLETED (Core Features)
+**Status:** ✅ Core billing infrastructure implemented
 
-**Missing:**
-- [ ] Stripe Connect account creation
-- [ ] Subscription management
-- [ ] Metered billing reporting to Stripe
-- [ ] Revenue share with destination charges
-- [ ] BillingCycle and UsageRecord models
+**Completed:**
+- ✅ Stripe Connect account creation (Express accounts)
+- ✅ Subscription management (create, update, cancel)
+- ✅ Metered billing reporting to Stripe (usage records)
+- ✅ BillingCycle and UsageRecord models (shadow ledger)
+- ✅ Webhook handling (subscription events, payment events)
+- ✅ Usage reporting script (cron-ready)
 
-**Files to Create:**
-- `packages/commerce/prisma/schema.prisma` - Add billing models
-- `packages/commerce/src/services/billing-service.ts`
-- `apps/platform/app/api/billing/` - Stripe webhooks
+**Files Created/Updated:**
+- ✅ `packages/commerce/prisma/schema.prisma` - Added Tenant, BillingCycle, UsageRecord models
+- ✅ `packages/commerce/src/services/billing-service.ts`
+- ✅ `apps/platform/app/api/stripe/webhook/route.ts`
+- ✅ `apps/platform/scripts/report-usage.ts`
+- ✅ Integration with credits system (automatic usage recording)
+
+**Remaining (Advanced):**
+- [ ] Revenue share with destination charges - structure exists, needs implementation
 
 **Reference:** v3 Chapter 4
 
@@ -170,17 +197,21 @@ This document identifies features from the design documents (v1-v4) that are mis
 
 ---
 
-### 9. Route Factory Pattern (v4)
-**Status:** Handlers exist, but factory pattern not fully implemented
+### 9. Route Factory Pattern (v4) ✅ COMPLETED
+**Status:** ✅ Fully implemented
 
-**Missing:**
-- [ ] Configuration injection interface
-- [ ] Factory functions for all route handlers
-- [ ] Proper mounting in platform app
+**Completed:**
+- ✅ Configuration injection interface (RouteFactoryConfig)
+- ✅ Factory functions for all route handlers (generate, jobStatus, searchPrompts, health)
+- ✅ Proper mounting in platform app (all routes use factory)
 
-**Files to Update:**
-- `packages/ai-editor/src/server/handlers/index.ts` - Add factory
-- `apps/platform/app/api/ai-editor/generate/route.ts` - Use factory
+**Files Created/Updated:**
+- ✅ `packages/ai-editor/src/server/handlers/factory.ts` - Factory implementation
+- ✅ `packages/ai-editor/src/server/handlers/index.ts` - Exports factory
+- ✅ `apps/platform/app/api/ai-editor/generate/route.ts` - Uses factory
+- ✅ `apps/platform/app/api/ai-editor/jobs/[jobId]/route.ts` - Uses factory
+- ✅ `apps/platform/app/api/ai-editor/prompts/search/route.ts` - Uses factory
+- ✅ `apps/platform/app/api/ai-editor/health/route.ts` - Health check endpoint
 
 **Reference:** v4 Section 5.1
 
@@ -289,22 +320,22 @@ This document identifies features from the design documents (v1-v4) that are mis
 ## 🔍 Cross-Cutting Concerns
 
 ### Database Migrations
-- [ ] Add pgvector extension
-- [ ] Add billing models (BillingCycle, UsageRecord)
+- ✅ Add pgvector extension (script provided: `packages/ai-editor/scripts/setup-pgvector.sql`)
+- ✅ Add billing models (BillingCycle, UsageRecord) - Added to commerce schema
 - [ ] Add FineTuningJob model
 - [ ] Add Campaign model
 
 ### Infrastructure
-- [ ] Redis setup for BullMQ
-- [ ] Object storage (S3/R2) for assets
-- [ ] Connection pooling (PgBouncer/Prisma Accelerate)
-- [ ] Worker deployment strategy
+- ✅ Redis setup for BullMQ (configured in worker script and factory)
+- [ ] Object storage (S3/R2) for assets - structure exists, needs S3/R2 integration
+- [ ] Connection pooling (PgBouncer/Prisma Accelerate) - Recommended for production
+- ✅ Worker deployment strategy (standalone script: `apps/platform/scripts/start-worker.ts`)
 
 ### Security
 - [ ] Token exchange auth pattern
 - [ ] RLS policies (if using PostgreSQL RLS)
 - [ ] API rate limiting
-- [ ] Webhook signature verification
+- ✅ Webhook signature verification (implemented in Stripe webhook handler)
 
 ---
 
@@ -320,18 +351,18 @@ This document identifies features from the design documents (v1-v4) that are mis
    - data-component-id ✅
    - Zod schemas ✅
    - Multi-tenancy ✅
-   - Async processing (structure exists)
-   - Billing (credits exist, Stripe missing)
+   - Async processing ✅ (fully implemented)
+   - Billing ✅ (credits + Stripe Connect implemented)
 
 ---
 
 ## 🎯 Quick Wins (Can be done immediately)
 
-1. **Route Factory Pattern** - Refactor existing handlers
-2. **Worker Execution Script** - Create `start-worker.ts`
-3. **Prompt Builder UI** - Add structured input controls
-4. **Job Status Polling** - Add simple polling hook
-5. **Theme JSON Schema** - Define in CMS package
+1. ✅ **Route Factory Pattern** - ✅ Completed
+2. ✅ **Worker Execution Script** - ✅ Completed (`start-worker.ts`)
+3. ✅ **Prompt Builder UI** - ✅ Completed
+4. ✅ **Job Status Polling** - ✅ Completed (JobStatusPolling component)
+5. **Theme JSON Schema** - Define in CMS package (Remaining)
 
 ---
 
