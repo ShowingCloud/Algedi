@@ -1,38 +1,60 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * Middleware to track usage and enforce billing
- * Counts requests to AI generation endpoint
+ * Middleware to:
+ * 1. Track usage and enforce billing for AI generation
+ * 2. Extract tenant ID from domain or path for multi-tenant routing
+ * 3. Add tenant context to requests
  */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Check if this is an AI generation request
-  if (pathname.startsWith('/api/ai-editor/generate')) {
-    // Extract tenantId from the request
-    // It could be in headers, query params, or request body
-    // For now, we'll try to get it from the request
-    let tenantId: string | null = null;
+  // Multi-tenant routing: Extract tenantId from domain or path
+  let tenantId: string | null = null;
 
-    // Try to get tenantId from various sources
+  // Strategy 1: Extract from subdomain (e.g., tenant1.example.com)
+  const hostname = request.headers.get('host') || '';
+  const subdomainMatch = hostname.match(/^([^.]+)\./);
+  if (subdomainMatch) {
+    tenantId = subdomainMatch[1];
+  }
+
+  // Strategy 2: Extract from path (e.g., /tenant1/about)
+  if (!tenantId) {
+    const pathMatch = pathname.match(/^\/([^/]+)/);
+    if (pathMatch && pathMatch[1] !== 'api') {
+      // Check if it's a valid tenant path (not /api, /_next, etc.)
+      const firstSegment = pathMatch[1];
+      if (!firstSegment.startsWith('_') && firstSegment !== 'favicon.ico') {
+        tenantId = firstSegment;
+      }
+    }
+  }
+
+  // Strategy 3: Extract from headers (for API requests)
+  if (!tenantId) {
     tenantId = request.headers.get('x-tenant-id') || 
                 request.nextUrl.searchParams.get('tenantId') ||
                 null;
+  }
 
-    // If tenantId is in the body, we can't read it here (body is consumed)
-    // So we'll rely on the route handler to extract it and track usage
-    // For now, we'll just pass through and let the route handler handle it
-    
-    // In a production system, you might want to:
-    // 1. Extract tenantId from JWT token or session
-    // 2. Log the request for usage tracking
-    // 3. Rate limit based on tenant
-    // 4. Add request metadata for billing
+  // Add tenant ID to request headers for downstream handlers
+  if (tenantId) {
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-tenant-id', tenantId);
+    requestHeaders.set('x-organization-id', tenantId); // Alias for consistency
 
-    // For now, we'll add a header that the route handler can use
-    if (tenantId) {
-      request.headers.set('x-tenant-id', tenantId);
+    // Check if this is an AI generation request
+    if (pathname.startsWith('/api/ai-editor/generate')) {
+      // Usage tracking will be handled by the route handler
+      // Middleware just ensures tenantId is available
     }
+
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
 
   return NextResponse.next();
@@ -41,7 +63,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/api/ai-editor/:path*',
-    // Add other paths that need usage tracking
+    '/((?!_next/static|_next/image|favicon.ico).*)', // Match all routes except Next.js internals
   ],
 };
 
