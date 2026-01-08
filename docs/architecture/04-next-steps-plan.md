@@ -145,53 +145,57 @@ This document identifies features from the design documents (v1-v4) that are mis
 
 ## 🟡 Important Missing Features (Medium Priority)
 
-### 6. Ghost-Text Pattern (v1, v3)
-**Status:** Not implemented
+### 6. Ghost-Text Pattern (v1, v3) ✅ COMPLETED
+**Status:** ✅ Fully implemented
 
-**Missing:**
-- [ ] ProseMirror or Lexical editor integration
-- [ ] Widget decorations for AI suggestions
-- [ ] Tab-to-accept functionality
-- [ ] Undo-safe suggestion handling
+**Completed:**
+- ✅ ProseMirror editor integration
+- ✅ Widget decorations for AI suggestions
+- ✅ Tab-to-accept functionality
+- ✅ Undo-safe suggestion handling
 
-**Files to Create:**
-- `packages/ai-editor/src/components/GhostTextEditor.tsx`
-- `packages/ai-editor/src/lib/decorations.ts`
+**Files Created:**
+- ✅ `packages/ai-editor/src/components/GhostTextEditor.tsx`
+- ✅ `packages/ai-editor/src/lib/decorations.ts`
+- ✅ `packages/ai-editor/src/server/actions/generate-text-suggestion.ts`
 
 **Reference:** v3 Section 1.3.1
 
 ---
 
-### 7. Async Inpainting & Image Masking (v1, v3)
-**Status:** Not implemented
+### 7. Async Inpainting & Image Masking (v1, v3) ✅ COMPLETED
+**Status:** ✅ Fully implemented
 
-**Missing:**
-- [ ] Canvas overlay for mask painting
-- [ ] Mask coordinate capture
-- [ ] Async job for diffusion model
-- [ ] Placeholder rendering during processing
+**Completed:**
+- ✅ Canvas overlay for mask painting
+- ✅ Mask coordinate capture
+- ✅ Async job for diffusion model
+- ✅ Placeholder rendering during processing
 
-**Files to Create:**
-- `packages/ai-editor/src/components/ImageInpainter.tsx`
-- `packages/ai-editor/src/workers/processors/image-inpainting.ts`
+**Files Created:**
+- ✅ `packages/ai-editor/src/components/ImageInpainter.tsx`
+- ✅ `packages/ai-editor/src/workers/processors/image-inpainting.ts`
+- ✅ `apps/platform/app/api/ai-editor/inpaint/route.ts`
 
 **Reference:** v3 Section 1.3.2
 
 ---
 
-### 8. Design Token System (v1, v2)
-**Status:** CSS variables exist, but full token system missing
+### 8. Design Token System (v1, v2) ✅ COMPLETED
+**Status:** ✅ Fully implemented
 
-**Missing:**
-- [ ] Theme JSON schema in database
-- [ ] ThemeProvider component
-- [ ] AI-powered theme generation
-- [ ] Token-based styling (not raw CSS)
+**Completed:**
+- ✅ Theme JSON schema in database
+- ✅ ThemeProvider component
+- ✅ AI-powered theme generation
+- ✅ Token-based styling (not raw CSS)
 
-**Files to Create:**
-- `packages/cms/src/lib/theme-schema.ts`
-- `packages/cms/src/components/ThemeProvider.tsx`
-- `packages/ai-editor/src/server/actions/generate-theme.ts`
+**Files Created:**
+- ✅ `packages/cms/src/lib/theme-schema.ts`
+- ✅ `packages/cms/src/lib/theme-parser.ts`
+- ✅ `packages/cms/src/components/ThemeProvider.tsx`
+- ✅ `packages/ai-editor/src/server/actions/generate-theme.ts`
+- ✅ `packages/cms/src/server/actions/theme-actions.ts`
 
 **Reference:** v1 Section 4.4, v2 Section 1
 
@@ -217,19 +221,21 @@ This document identifies features from the design documents (v1-v4) that are mis
 
 ---
 
-### 10. CMS Subsite Generation (v2)
-**Status:** PageLayout model exists, but runtime rendering not implemented
+### 10. CMS Subsite Generation (v2) ✅ COMPLETED
+**Status:** ✅ Fully implemented
 
-**Missing:**
-- [ ] Dynamic component selection from component_map
-- [ ] Runtime theme injection
-- [ ] Multi-tenant routing middleware
-- [ ] Site definition JSON structure
+**Completed:**
+- ✅ Dynamic component selection from component_map
+- ✅ Runtime theme injection
+- ✅ Multi-tenant routing middleware
+- ✅ Site definition JSON structure
 
-**Files to Create:**
-- `packages/cms/src/services/site-renderer.ts`
-- `apps/platform/middleware.ts` - Add tenant detection
-- `apps/platform/app/[tenant]/[...path]/page.tsx` - Dynamic rendering
+**Files Created:**
+- ✅ `packages/cms/src/services/site-renderer.ts`
+- ✅ `packages/cms/src/lib/component-map.ts`
+- ✅ `packages/cms/src/lib/site-definition.ts`
+- ✅ `apps/platform/middleware.ts` - Updated with tenant detection
+- ✅ `apps/platform/app/[tenant]/[...path]/page.tsx` - Dynamic rendering
 
 **Reference:** v2 Section 2.1
 
@@ -362,7 +368,7 @@ This document identifies features from the design documents (v1-v4) that are mis
 2. ✅ **Worker Execution Script** - ✅ Completed (`start-worker.ts`)
 3. ✅ **Prompt Builder UI** - ✅ Completed
 4. ✅ **Job Status Polling** - ✅ Completed (JobStatusPolling component)
-5. **Theme JSON Schema** - Define in CMS package (Remaining)
+5. ✅ **Theme JSON Schema** - ✅ Completed (theme-schema.ts, theme-parser.ts, ThemeProvider)
 
 ---
 
